@@ -61,7 +61,6 @@
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		8CB65DC61BE7581200F65B3F /* RRGNotificationCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB65DC41BE7581200F65B3F /* RRGNotificationCenter.cpp */; };
-		8CB65DC91BE763E900F65B3F /* RRGNotification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB65DC71BE763E900F65B3F /* RRGNotification.cpp */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
@@ -158,9 +157,8 @@
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		8CB65DC41BE7581200F65B3F /* RRGNotificationCenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RRGNotificationCenter.cpp; sourceTree = "<group>"; };
 		8CB65DC51BE7581200F65B3F /* RRGNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRGNotificationCenter.h; sourceTree = "<group>"; };
-		8CB65DC71BE763E900F65B3F /* RRGNotification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RRGNotification.cpp; sourceTree = "<group>"; };
-		8CB65DC81BE763E900F65B3F /* RRGNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRGNotification.h; sourceTree = "<group>"; };
 		8CB65DCB1BE7652100F65B3F /* RRGNotification_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRGNotification_Private.h; sourceTree = "<group>"; };
+		8CB65DCE1BE8739900F65B3F /* RRGNotificationCenter_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRGNotificationCenter_Private.h; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -310,9 +308,8 @@
 				46880B8719C43A87006E1F66 /* HelloWorldScene.h */,
 				8CB65DC41BE7581200F65B3F /* RRGNotificationCenter.cpp */,
 				8CB65DC51BE7581200F65B3F /* RRGNotificationCenter.h */,
-				8CB65DC71BE763E900F65B3F /* RRGNotification.cpp */,
-				8CB65DC81BE763E900F65B3F /* RRGNotification.h */,
 				8CB65DCB1BE7652100F65B3F /* RRGNotification_Private.h */,
+				8CB65DCE1BE8739900F65B3F /* RRGNotificationCenter_Private.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -515,7 +512,6 @@
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				8CB65DC61BE7581200F65B3F /* RRGNotificationCenter.cpp in Sources */,
-				8CB65DC91BE763E900F65B3F /* RRGNotification.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 			);
@@ -551,8 +547,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Masanori Yamamoto (RL8S2YHCG3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Masanori Yamamoto (RL8S2YHCG3)";
 				COMPRESS_PNG_FILES = NO;
 				ENABLE_BITCODE = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -591,8 +587,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Masanori Yamamoto (RL8S2YHCG3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Masanori Yamamoto (RL8S2YHCG3)";
 				COMPRESS_PNG_FILES = NO;
 				ENABLE_BITCODE = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -696,6 +692,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Masanori Yamamoto (RL8S2YHCG3)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_TESTABILITY = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -728,6 +725,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Masanori Yamamoto (RL8S2YHCG3)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (

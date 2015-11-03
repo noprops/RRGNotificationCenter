@@ -1,5 +1,12 @@
 #include "HelloWorldScene.h"
+#include "RRGNotificationCenter.h"
+#include "RRGNotification.h"
 
+namespace {
+    const char* kTestNotification = "test";
+}
+
+using namespace std;
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -72,15 +79,27 @@ bool HelloWorld::init()
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
     
+    sharedNotificationCenter->addObserver(this,
+                                          kTestNotification,
+                                          nullptr,
+                                          [](RRGNotification* note){
+                                              CCLOG("%s", note->getName().c_str());
+                                          });
+    
     return true;
 }
 
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
+    CCLOG("button pressed");
+    sharedNotificationCenter->postNotification(kTestNotification, this);
+    
+    /*
     Director::getInstance()->end();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
+     */
 }

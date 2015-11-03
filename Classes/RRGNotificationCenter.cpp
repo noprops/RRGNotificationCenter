@@ -7,10 +7,51 @@
 //
 
 #include "RRGNotificationCenter.h"
-#include "RRGNotification.h"
 
 using namespace std;
 USING_NS_CC;
+
+#pragma mark - notification
+
+RRGNotification::RRGNotification()
+:_name(""),
+_sender(nullptr)
+{
+    
+}
+
+RRGNotification::~RRGNotification()
+{
+    CC_SAFE_RELEASE_NULL(_sender);
+    _vec2Map.clear();
+    _sizeMap.clear();
+    _rectMap.clear();
+    _valueMap.clear();
+    _objectMap.clear();
+}
+
+RRGNotification* RRGNotification::create(const string& name, Ref* sender)
+{
+    RRGNotification *ref = new (nothrow) RRGNotification();
+    
+    if (ref && ref->init(name, sender)) {
+        ref->autorelease();
+        return ref;
+    } else {
+        CC_SAFE_DELETE(ref);
+        return nullptr;
+    }
+}
+
+bool RRGNotification::init(const string& name, Ref* sender)
+{
+    _name = name;
+    _sender = sender;
+    CC_SAFE_RETAIN(_sender);
+    return true;
+}
+
+#pragma mark - notification center
 
 namespace {
     RRGNotificationCenter* _sharedInstance = nullptr;
@@ -23,7 +64,8 @@ RRGNotificationCenter::RRGNotificationCenter()
 
 RRGNotificationCenter::~RRGNotificationCenter()
 {
-    _callbackMap.clear();
+    _notificationMap.clear();
+    _noSenderMap.clear();
 }
 
 RRGNotificationCenter* RRGNotificationCenter::getInstance()
@@ -45,19 +87,33 @@ void RRGNotificationCenter::addObserver(Ref* observer,
                                         Ref* sender,
                                         const RRGNotificationCallback& callback)
 {
-    if (_callbackMap.find(name) == _callbackMap.end()) {
-        SenderToMap senderToMap;
-        _callbackMap.insert(make_pair(name, senderToMap));
+    // if sender is null
+    if (sender == nullptr) {
+        if (_noSenderMap.find(name) == _noSenderMap.end()) {
+            ObserverToCallbackMap observerToCallbackMap;
+            _noSenderMap.insert(make_pair(name, observerToCallbackMap));
+        }
+        
+        ObserverToCallbackMap& observerToCallbackMap = _noSenderMap.at(name);
+        
+        observerToCallbackMap.insert(make_pair(observer, callback));
+        return;
     }
     
-    SenderToMap& senderToMap = _callbackMap.at(name);
+    // if sender is not null
+    if (_notificationMap.find(sender) == _notificationMap.end()) {
+        NameKeyMap nameKeyMap;
+        _notificationMap.insert(make_pair(sender, nameKeyMap));
+    }
     
-    if (senderToMap.find(sender) == senderToMap.end()) {
+    NameKeyMap& nameKeyMap = _notificationMap.at(sender);
+    
+    if (nameKeyMap.find(name) == nameKeyMap.end()) {
         ObserverToCallbackMap observerToCallbackMap;
-        senderToMap.insert(make_pair(sender, observerToCallbackMap));
+        nameKeyMap.insert(make_pair(name, observerToCallbackMap));
     }
     
-    ObserverToCallbackMap& observerToCallbackMap = senderToMap.at(sender);
+    ObserverToCallbackMap& observerToCallbackMap = nameKeyMap.at(name);
     
     observerToCallbackMap.insert(make_pair(observer, callback));
 }
@@ -65,20 +121,30 @@ void RRGNotificationCenter::removeObserver(Ref* observer,
                                            const std::string& name,
                                            Ref* sender)
 {
-    for (auto it1 = _callbackMap.begin();
-         it1 != _callbackMap.end();
+    if (sender == nullptr) {
+        for (auto it = _noSenderMap.begin();
+             it != _noSenderMap.end();
+             ++it)
+        {
+            if (name.empty() || it->first == name) {
+                it->second.erase(observer);
+            }
+        }
+    }
+    
+    for (auto it1 = _notificationMap.begin();
+         it1 != _notificationMap.end();
          ++it1)
     {
-        if (name.empty() || it1->first == name) {
-            SenderToMap& senderToMap = it1->second;
+        if (sender == nullptr || it1->first == sender) {
+            NameKeyMap& nameKeyMap = it1->second;
             
-            for (auto it2 = senderToMap.begin();
-                 it2 != senderToMap.end();
+            for (auto it2 = nameKeyMap.begin();
+                 it2 != nameKeyMap.end();
                  ++it2)
             {
-                if (sender == nullptr || it2->first == sender) {
-                    ObserverToCallbackMap& observerToCallbackMap = it2->second;
-                    observerToCallbackMap.erase(observer);
+                if (name.empty() || it2->first == name) {
+                    it2->second.erase(observer);
                 }
             }
         }
@@ -86,11 +152,24 @@ void RRGNotificationCenter::removeObserver(Ref* observer,
 }
 void RRGNotificationCenter::postNotification(RRGNotification* notification)
 {
-    auto it1 = _callbackMap.find(notification->getName());
-    if (it1 != _callbackMap.end()) {
-        SenderToMap& senderToMap = it1->second;
-        auto it2 = senderToMap.find(notification->getSender());
-        if (it2 != senderToMap.end()) {
+    {
+        auto it1 = _noSenderMap.find(notification->getName());
+        if (it1 != _noSenderMap.end()) {
+            ObserverToCallbackMap& observerToCallbackMap = it1->second;
+            for (auto it2 = observerToCallbackMap.begin();
+                 it2 != observerToCallbackMap.end();
+                 ++it2)
+            {
+                it2->second(notification);
+            }
+        }
+    }
+    
+    auto it1 = _notificationMap.find(notification->getSender());
+    if (it1 != _notificationMap.end()) {
+        NameKeyMap& nameKeyMap = it1->second;
+        auto it2 = nameKeyMap.find(notification->getName());
+        if (it2 != nameKeyMap.end()) {
             ObserverToCallbackMap& observerToCallbackMap = it2->second;
             for (auto it3 = observerToCallbackMap.begin();
                  it3 != observerToCallbackMap.end();

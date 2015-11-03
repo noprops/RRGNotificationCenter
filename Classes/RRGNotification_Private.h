@@ -9,7 +9,7 @@
 #ifndef __RRGNotification__RRGNotification_Private__
 #define __RRGNotification__RRGNotification_Private__
 
-#include "RRGNotification.h"
+#include "RRGNotificationCenter.h"
 
 template <typename T>
 inline void RRGNotification::addValue(T value, const std::string& key)

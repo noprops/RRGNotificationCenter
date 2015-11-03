@@ -56,6 +56,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // Set the design resolution
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
     Size frameSize = glview->getFrameSize();
+    if (frameSize.height > mediumResolutionSize.height) {
+        director->setContentScaleFactor(2);
+    } else {
+        director->setContentScaleFactor(1);
+    }
+    /*
     // if the frame's height is larger than the height of medium size.
     if (frameSize.height > mediumResolutionSize.height)
     {        
@@ -70,7 +76,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     else
     {        
         director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
-    }
+    }*/
 
     register_all_packages();
 
