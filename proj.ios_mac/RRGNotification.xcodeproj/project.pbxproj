@@ -157,7 +157,6 @@
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		8CB65DC41BE7581200F65B3F /* RRGNotificationCenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RRGNotificationCenter.cpp; sourceTree = "<group>"; };
 		8CB65DC51BE7581200F65B3F /* RRGNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRGNotificationCenter.h; sourceTree = "<group>"; };
-		8CB65DCB1BE7652100F65B3F /* RRGNotification_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRGNotification_Private.h; sourceTree = "<group>"; };
 		8CB65DCE1BE8739900F65B3F /* RRGNotificationCenter_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRGNotificationCenter_Private.h; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -308,7 +307,6 @@
 				46880B8719C43A87006E1F66 /* HelloWorldScene.h */,
 				8CB65DC41BE7581200F65B3F /* RRGNotificationCenter.cpp */,
 				8CB65DC51BE7581200F65B3F /* RRGNotificationCenter.h */,
-				8CB65DCB1BE7652100F65B3F /* RRGNotification_Private.h */,
 				8CB65DCE1BE8739900F65B3F /* RRGNotificationCenter_Private.h */,
 			);
 			name = Classes;

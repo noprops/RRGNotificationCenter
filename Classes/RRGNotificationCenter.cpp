@@ -83,7 +83,7 @@ void RRGNotificationCenter::destroyInstance()
 }
 
 void RRGNotificationCenter::addObserver(Ref* observer,
-                                        const std::string& name,
+                                        const string& name,
                                         Ref* sender,
                                         const RRGNotificationCallback& callback)
 {
@@ -118,7 +118,7 @@ void RRGNotificationCenter::addObserver(Ref* observer,
     observerToCallbackMap.insert(make_pair(observer, callback));
 }
 void RRGNotificationCenter::removeObserver(Ref* observer,
-                                           const std::string& name,
+                                           const string& name,
                                            Ref* sender)
 {
     // no sender map
@@ -217,7 +217,7 @@ void RRGNotificationCenter::postNotification(RRGNotification* notification)
         }
     }
 }
-void RRGNotificationCenter::postNotification(const std::string& name,
+void RRGNotificationCenter::postNotification(const string& name,
                                              Ref* sender)
 {
     RRGNotification* note = RRGNotification::create(name, sender);

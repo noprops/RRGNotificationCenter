@@ -40,8 +40,6 @@ public:
     inline T getValue(const std::string& key);
 };
 
-#include "RRGNotification_Private.h"
-
 class RRGNotificationCenter : public cocos2d::Ref
 {
 public:
