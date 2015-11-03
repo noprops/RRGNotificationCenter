@@ -76,10 +76,22 @@ public:
 #pragma mark - key value observing
     
     template <typename T>
-    inline void addObserverForKey(Ref* observer,
-                                  const std::string& key,
-                                  Ref* sender,
-                                  const std::function<void(T oldVal, T newVal)>& callback);
+    inline void addKeyValueObserver(Ref* observer,
+                                    const std::string& key,
+                                    Ref* sender,
+                                    const std::function<void(T oldVal, T newVal)>& callback);
+    
+    void removeKeyValueObserver(Ref* observer,
+                                const std::string& key,
+                                Ref* sender);
+    
+    template <typename T>
+    inline void postDidChangeValueNotification(const std::string& key,
+                                               cocos2d::Ref* sender,
+                                               T oldVal,
+                                               T newVal);
 };
+
+#include "RRGNotificationCenter_Private.h"
 
 #endif /* defined(__RRGNotification__RRGNotificationCenter__) */

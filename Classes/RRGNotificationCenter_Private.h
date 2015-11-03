@@ -11,11 +11,16 @@
 
 #include "RRGNotificationCenter.h"
 
+namespace {
+    const char* kNotificationOldKey = "__old__";
+    const char* kNotificationNewKey = "__new__";
+}
+
 template <typename T>
-inline void RRGNotificationCenter::addObserverForKey(Ref* observer,
-                                                     const std::string& key,
-                                                     Ref* sender,
-                                                     const std::function<void(T oldVal, T newVal)>& callback)
+inline void RRGNotificationCenter::addKeyValueObserver(Ref* observer,
+                                                       const std::string& key,
+                                                       Ref* sender,
+                                                       const std::function<void(T oldVal, T newVal)>& callback)
 {
     if (_KVOMap.find(sender) == _KVOMap.end()) {
         NameKeyMap nameKeyMap;
@@ -27,10 +32,24 @@ inline void RRGNotificationCenter::addObserverForKey(Ref* observer,
         nameKeyMap.insert(std::make_pair(key, observerToCallbackMap));
     }
     ObserverToCallbackMap& observerToCallbackMap = nameKeyMap.at(key);
-    [](RRGNotification* note){
-        note->getva
-    }
-    observerToCallbackMap.insert(std::make_pair(observer, <#_T2 &&__t2#>))
+    auto callback2 = [callback](RRGNotification* note){
+        T oldVal = note->getValue<T>(kNotificationOldKey);
+        T newVal = note->getValue<T>(kNotificationNewKey);
+        callback(oldVal, newVal);
+    };
+    observerToCallbackMap.insert(std::make_pair(observer, callback2));
+}
+
+template <typename T>
+inline void RRGNotificationCenter::postDidChangeValueNotification(const std::string& key,
+                                                                  cocos2d::Ref* sender,
+                                                                  T oldVal,
+                                                                  T newVal)
+{
+    RRGNotification* note = RRGNotification::create(key, sender);
+    note->addValue(oldVal, kNotificationOldKey);
+    note->addValue(newVal, kNotificationNewKey);
+    postNotification(note);
 }
 
 #endif /* defined(__RRGNotification__RRGNotificationCenter_Private__) */

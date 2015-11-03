@@ -186,3 +186,28 @@ void RRGNotificationCenter::postNotification(const std::string& name,
     RRGNotification* note = RRGNotification::create(name, sender);
     postNotification(note);
 }
+
+#pragma mark - KVO
+
+void RRGNotificationCenter::removeKeyValueObserver(Ref* observer,
+                                                   const std::string& key,
+                                                   Ref* sender)
+{
+    for (auto it1 = _KVOMap.begin();
+         it1 != _KVOMap.end();
+         ++it1)
+    {
+        if (it1->first == sender) {
+            NameKeyMap& nameKeyMap = it1->second;
+            
+            for (auto it2 = nameKeyMap.begin();
+                 it2 != nameKeyMap.end();
+                 ++it2)
+            {
+                if (name.empty() || it2->first == name) {
+                    it2->second.erase(observer);
+                }
+            }
+        }
+    }
+}
