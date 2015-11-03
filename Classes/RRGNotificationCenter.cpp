@@ -121,32 +121,69 @@ void RRGNotificationCenter::removeObserver(Ref* observer,
                                            const std::string& name,
                                            Ref* sender)
 {
+    // no sender map
+    
     if (sender == nullptr) {
-        for (auto it = _noSenderMap.begin();
-             it != _noSenderMap.end();
-             ++it)
-        {
-            if (name.empty() || it->first == name) {
+        if (name.empty()) {
+            for (auto it = _noSenderMap.begin();
+                 it != _noSenderMap.end();
+                 ++it)
+            {
+                it->second.erase(observer);
+            }
+        } else {
+            auto it = _noSenderMap.find(name);
+            if (it != _noSenderMap.end()) {
                 it->second.erase(observer);
             }
         }
     }
     
-    for (auto it1 = _notificationMap.begin();
-         it1 != _notificationMap.end();
-         ++it1)
-    {
-        if (sender == nullptr || it1->first == sender) {
-            NameKeyMap& nameKeyMap = it1->second;
-            
-            for (auto it2 = nameKeyMap.begin();
-                 it2 != nameKeyMap.end();
-                 ++it2)
+    // notification map
+    
+    auto funcEraseObserberFromNameKeyMap = [observer,name](NameKeyMap& nameKeyMap){
+        if (name.empty()) {
+            for (auto it = nameKeyMap.begin();
+                 it != nameKeyMap.end();
+                 ++it)
             {
-                if (name.empty() || it2->first == name) {
-                    it2->second.erase(observer);
-                }
+                it->second.erase(observer);
             }
+        } else {
+            auto it = nameKeyMap.find(name);
+            if (it != nameKeyMap.end()) {
+                it->second.erase(observer);
+            }
+        }
+    };
+    
+    if (sender == nullptr) {
+        for (auto it = _notificationMap.begin();
+             it != _notificationMap.end();
+             ++it)
+        {
+            funcEraseObserberFromNameKeyMap(it->second);
+        }
+    } else {
+        auto it = _notificationMap.find(sender);
+        if (it != _notificationMap.end()) {
+            funcEraseObserberFromNameKeyMap(it->second);
+        }
+    }
+    
+    // KVO map
+    
+    if (sender == nullptr) {
+        for (auto it = _KVOMap.begin();
+             it != _KVOMap.end();
+             ++it)
+        {
+            funcEraseObserberFromNameKeyMap(it->second);
+        }
+    } else {
+        auto it = _KVOMap.find(sender);
+        if (it != _KVOMap.end()) {
+            funcEraseObserberFromNameKeyMap(it->second);
         }
     }
 }
@@ -185,29 +222,4 @@ void RRGNotificationCenter::postNotification(const std::string& name,
 {
     RRGNotification* note = RRGNotification::create(name, sender);
     postNotification(note);
-}
-
-#pragma mark - KVO
-
-void RRGNotificationCenter::removeKeyValueObserver(Ref* observer,
-                                                   const std::string& key,
-                                                   Ref* sender)
-{
-    for (auto it1 = _KVOMap.begin();
-         it1 != _KVOMap.end();
-         ++it1)
-    {
-        if (it1->first == sender) {
-            NameKeyMap& nameKeyMap = it1->second;
-            
-            for (auto it2 = nameKeyMap.begin();
-                 it2 != nameKeyMap.end();
-                 ++it2)
-            {
-                if (name.empty() || it2->first == name) {
-                    it2->second.erase(observer);
-                }
-            }
-        }
-    }
 }
