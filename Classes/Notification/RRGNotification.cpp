@@ -1,5 +1,5 @@
 //
-//  RRGNotificationCenter.cpp
+//  RRGNotification.cpp
 //  RRGNotification
 //
 //  Created by 山本政徳 on 2015/11/02.

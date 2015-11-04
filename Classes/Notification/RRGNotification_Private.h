@@ -1,13 +1,13 @@
 //
-//  RRGNotificationCenter_Private.h
+//  RRGNotification_Private.h
 //  RRGNotification
 //
 //  Created by 山本政徳 on 2015/11/03.
 //
 //
 
-#ifndef __RRGNotification__RRGNotificationCenter_Private__
-#define __RRGNotification__RRGNotificationCenter_Private__
+#ifndef __RRGNotification__RRGNotification_Private__
+#define __RRGNotification__RRGNotification_Private__
 
 #include "RRGNotification.h"
 
@@ -171,4 +171,4 @@ inline void RRGNotificationCenter::postDidChangeValueNotification(const std::str
     }
 }
 
-#endif /* defined(__RRGNotification__RRGNotificationCenter_Private__) */
+#endif /* defined(__RRGNotification__RRGNotification_Private__) */

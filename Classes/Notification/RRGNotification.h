@@ -1,13 +1,13 @@
 //
-//  RRGNotificationCenter.h
+//  RRGNotification.h
 //  RRGNotification
 //
 //  Created by 山本政徳 on 2015/11/02.
 //
 //
 
-#ifndef __RRGNotification__RRGNotificationCenter__
-#define __RRGNotification__RRGNotificationCenter__
+#ifndef __RRGNotification__RRGNotification__
+#define __RRGNotification__RRGNotification__
 
 #include "cocos2d.h"
 
@@ -108,4 +108,4 @@ public:
 
 #include "RRGNotification_Private.h"
 
-#endif /* defined(__RRGNotification__RRGNotificationCenter__) */
+#endif /* defined(__RRGNotification__RRGNotification__) */
