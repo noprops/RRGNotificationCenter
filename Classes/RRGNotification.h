@@ -13,6 +13,27 @@
 
 #define sharedNotificationCenter RRGNotificationCenter::getInstance()
 
+#define DEFINE_SETTER(varType, pvarName, setterName)\
+public: virtual void setterName(varType var)\
+{\
+varType oldVal = pvarName;\
+pvarName = var;\
+varType newVal = pvarName;\
+sharedNotificationCenter->postDidChangeValueNotification(#pvarName,this,oldVal,newVal);\
+}
+
+#define DEFINE_SETTER_CONST_REF(varType, pvarName, setterName)\
+public: virtual void setterName(const varType& var)\
+{\
+varType oldVal = pvarName;\
+pvarName = var;\
+varType newVal = pvarName;\
+sharedNotificationCenter->postDidChangeValueNotification(#pvarName,this,oldVal,newVal);\
+}
+
+extern const char* kNotificationOldKey;
+extern const char* kNotificationNewKey;
+
 class RRGNotification : public cocos2d::Ref
 {
 protected:
@@ -78,7 +99,6 @@ public:
                                     const std::string& key,
                                     Ref* sender,
                                     const std::function<void(T oldVal, T newVal)>& callback);
-    
     template <typename T>
     inline void postDidChangeValueNotification(const std::string& key,
                                                cocos2d::Ref* sender,
@@ -86,6 +106,6 @@ public:
                                                T newVal);
 };
 
-#include "RRGNotificationCenter_Private.h"
+#include "RRGNotification_Private.h"
 
 #endif /* defined(__RRGNotification__RRGNotificationCenter__) */

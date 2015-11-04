@@ -6,7 +6,10 @@
 //
 //
 
-#include "RRGNotificationCenter.h"
+#include "RRGNotification.h"
+
+const char* kNotificationOldKey = "__old__";
+const char* kNotificationNewKey = "__new__";
 
 using namespace std;
 USING_NS_CC;

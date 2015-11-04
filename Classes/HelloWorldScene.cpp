@@ -1,13 +1,25 @@
 #include "HelloWorldScene.h"
-#include "RRGNotificationCenter.h"
-#include "RRGNotification.h"
 
 namespace {
     const char* kTestNotification = "test";
+    const char* kTileCoord = "_tileCoord";
+    const char* kHP = "_HP";
+    const char* kDisplayName = "_displayName";
 }
 
 using namespace std;
 USING_NS_CC;
+
+HelloWorld::HelloWorld()
+:_levelObject(nullptr)
+{
+    
+};
+HelloWorld::~HelloWorld()
+{
+    sharedNotificationCenter->removeObserver(this);
+    CC_SAFE_RELEASE_NULL(_levelObject);
+};
 
 Scene* HelloWorld::createScene()
 {
@@ -40,18 +52,23 @@ bool HelloWorld::init()
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
     
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
+    // add a "close" icon to exit the progress. it's an autorelease object
+    auto item1 = MenuItemImage::create("CloseNormal.png",
+                                       "CloseSelected.png",
+                                       CC_CALLBACK_1(HelloWorld::item1Callback, this));
+    
+    item1->setPosition(origin + Vec2(visibleSize.width - item1->getContentSize().width / 2,
+                                     item1->getContentSize().height / 2));
+    
+    auto item2 = MenuItemImage::create("CloseNormal.png",
+                                       "CloseSelected.png",
+                                       CC_CALLBACK_1(HelloWorld::item2Callback, this));
+    
+    item2->setPosition(item1->getPosition() + Vec2(0,item2->getContentSize().height));
 
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
+    auto menu = Menu::create(item1, item2, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
@@ -79,27 +96,62 @@ bool HelloWorld::init()
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
     
+    _levelObject = RRGLevelObject::create();
+    CC_SAFE_RETAIN(_levelObject);
+    
     sharedNotificationCenter->addObserver(this,
                                           kTestNotification,
                                           nullptr,
                                           [](RRGNotification* note){
                                               CCLOG("%s", note->getName().c_str());
                                           });
+    sharedNotificationCenter->addKeyValueObserver<Vec2>
+    (this,
+     kTileCoord,
+     _levelObject,
+     [](const Vec2& oldVal, const Vec2& newVal){
+         CCLOG("old = {%.0f,%.0f} new = {%.0f,%.0f}",
+               oldVal.x,oldVal.y,newVal.x,newVal.y);
+     });
+    sharedNotificationCenter->addKeyValueObserver<int>
+    (this,
+     kHP,
+     _levelObject,
+     [](const int& oldVal, const int& newVal){
+         CCLOG("old = %d new = %d",oldVal,newVal);
+     });
     
+    sharedNotificationCenter->addKeyValueObserver<std::string>
+    (this,
+     kDisplayName,
+     _levelObject,
+     [](const std::string& oldVal, const std::string& newVal){
+         CCLOG("old = %s new = %s",oldVal.c_str(),newVal.c_str());
+     });
+     
     return true;
 }
 
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
+void HelloWorld::item1Callback(Ref* sender)
 {
-    CCLOG("button pressed");
+    CCLOG("post test notification");
     sharedNotificationCenter->postNotification(kTestNotification, this);
-    
-    /*
-    Director::getInstance()->end();
+}
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
-     */
+void HelloWorld::item2Callback(Ref* sender)
+{
+    CCLOG("change variables of levelobject");
+    
+    static Vec2 tileCoord = Vec2::ZERO;
+    static int HP = 0;
+    static std::string name = "";
+    
+    tileCoord += Vec2(1,1);
+    HP += 1;
+    name += "a";
+    
+    _levelObject->setTileCoord(tileCoord);
+    _levelObject->setHP(HP);
+    _levelObject->setDisplayName(name);
 }

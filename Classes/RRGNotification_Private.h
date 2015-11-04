@@ -9,7 +9,7 @@
 #ifndef __RRGNotification__RRGNotificationCenter_Private__
 #define __RRGNotification__RRGNotificationCenter_Private__
 
-#include "RRGNotificationCenter.h"
+#include "RRGNotification.h"
 
 #pragma mark - notification
 
@@ -19,17 +19,17 @@ inline void RRGNotification::addValue(T value, const std::string& key)
     _valueMap[key] = value;
 }
 template <>
-inline void RRGNotification::addValue(const cocos2d::Vec2& value, const std::string& key)
+inline void RRGNotification::addValue(cocos2d::Vec2 value, const std::string& key)
 {
     _vec2Map[key] = value;
 }
 template <>
-inline void RRGNotification::addValue(const cocos2d::Size& value, const std::string& key)
+inline void RRGNotification::addValue(cocos2d::Size value, const std::string& key)
 {
     _sizeMap[key] = value;
 }
 template <>
-inline void RRGNotification::addValue(const cocos2d::Rect& value, const std::string& key)
+inline void RRGNotification::addValue(cocos2d::Rect value, const std::string& key)
 {
     _rectMap[key] = value;
 }
@@ -121,11 +121,6 @@ inline cocos2d::Rect RRGNotification::getValue(const std::string& key)
 
 #pragma mark - notification center
 
-namespace {
-    const char* kNotificationOldKey = "__old__";
-    const char* kNotificationNewKey = "__new__";
-}
-
 template <typename T>
 inline void RRGNotificationCenter::addKeyValueObserver(Ref* observer,
                                                        const std::string& key,
@@ -156,10 +151,24 @@ inline void RRGNotificationCenter::postDidChangeValueNotification(const std::str
                                                                   T oldVal,
                                                                   T newVal)
 {
-    RRGNotification* note = RRGNotification::create(key, sender);
-    note->addValue(oldVal, kNotificationOldKey);
-    note->addValue(newVal, kNotificationNewKey);
-    postNotification(note);
+    RRGNotification* notification = RRGNotification::create(key, sender);
+    notification->addValue(oldVal, kNotificationOldKey);
+    notification->addValue(newVal, kNotificationNewKey);
+    
+    auto it1 = _KVOMap.find(sender);
+    if (it1 != _KVOMap.end()) {
+        NameKeyMap& nameKeyMap = it1->second;
+        auto it2 = nameKeyMap.find(key);
+        if (it2 != nameKeyMap.end()) {
+            ObserverToCallbackMap& observerToCallbackMap = it2->second;
+            for (auto it3 = observerToCallbackMap.begin();
+                 it3 != observerToCallbackMap.end();
+                 ++it3)
+            {
+                it3->second(notification);
+            }
+        }
+    }
 }
 
 #endif /* defined(__RRGNotification__RRGNotificationCenter_Private__) */
