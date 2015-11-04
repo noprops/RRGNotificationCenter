@@ -109,7 +109,7 @@ bool HelloWorld::init()
     (this,
      kTileCoord,
      _levelObject,
-     [](const Vec2& oldVal, const Vec2& newVal){
+     [](Ref* sender, const Vec2& oldVal, const Vec2& newVal){
          CCLOG("old = {%.0f,%.0f} new = {%.0f,%.0f}",
                oldVal.x,oldVal.y,newVal.x,newVal.y);
      });
@@ -117,7 +117,7 @@ bool HelloWorld::init()
     (this,
      kHP,
      _levelObject,
-     [](const int& oldVal, const int& newVal){
+     [](Ref* sender, const int& oldVal, const int& newVal){
          CCLOG("old = %d new = %d",oldVal,newVal);
      });
     
@@ -125,7 +125,7 @@ bool HelloWorld::init()
     (this,
      kDisplayName,
      _levelObject,
-     [](const std::string& oldVal, const std::string& newVal){
+     [](Ref* sender, const std::string& oldVal, const std::string& newVal){
          CCLOG("old = %s new = %s",oldVal.c_str(),newVal.c_str());
      });
      

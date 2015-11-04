@@ -98,7 +98,7 @@ public:
     inline void addKeyValueObserver(Ref* observer,
                                     const std::string& key,
                                     Ref* sender,
-                                    const std::function<void(T oldVal, T newVal)>& callback);
+                                    const std::function<void(Ref* sender, T oldVal, T newVal)>& callback);
     template <typename T>
     inline void postDidChangeValueNotification(const std::string& key,
                                                cocos2d::Ref* sender,

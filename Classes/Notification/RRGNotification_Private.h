@@ -125,7 +125,7 @@ template <typename T>
 inline void RRGNotificationCenter::addKeyValueObserver(Ref* observer,
                                                        const std::string& key,
                                                        Ref* sender,
-                                                       const std::function<void(T oldVal, T newVal)>& callback)
+                                                       const std::function<void(Ref* sender, T oldVal, T newVal)>& callback)
 {
     if (_KVOMap.find(sender) == _KVOMap.end()) {
         NameKeyMap nameKeyMap;
@@ -140,7 +140,7 @@ inline void RRGNotificationCenter::addKeyValueObserver(Ref* observer,
     auto callback2 = [callback](RRGNotification* note){
         T oldVal = note->getValue<T>(kNotificationOldKey);
         T newVal = note->getValue<T>(kNotificationNewKey);
-        callback(oldVal, newVal);
+        callback(note->getSender(), oldVal, newVal);
     };
     observerToCallbackMap.insert(std::make_pair(observer, callback2));
 }
