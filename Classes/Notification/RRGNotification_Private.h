@@ -36,7 +36,9 @@ inline void RRGNotification::addValue(cocos2d::Rect value, const std::string& ke
 template <>
 inline void RRGNotification::addValue(cocos2d::Ref* value, const std::string& key)
 {
-    _objectMap.insert(key, value);
+    if (value) {
+        _objectMap.insert(key, value);
+    }
 }
 
 #pragma mark - get value

@@ -44,7 +44,7 @@ public: virtual void setterName(varType var)\
         CC_SAFE_RETAIN(var); \
         CC_SAFE_RELEASE(pvarName); \
         pvarName = var;\
-        sharedNotificationCenter->postDidChangeValueNotification(#pvarName,this,oldVal,newVal);\
+        sharedNotificationCenter->postDidChangeValueNotification<cocos2d::Ref*>(#pvarName,this,oldVal,newVal);\
         \
         CC_SAFE_RELEASE(oldVal);\
         CC_SAFE_RELEASE(newVal);\
