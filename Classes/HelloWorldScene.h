@@ -30,6 +30,7 @@ private:
     cocos2d::Vec2 _tileCoord;
     int _HP;
     std::string _displayName;
+    Node* _node;
 public:
     const cocos2d::Vec2& getTileCoord(){return _tileCoord;}
     DEFINE_SETTER_CONST_REF(cocos2d::Vec2, _tileCoord, setTileCoord);
@@ -37,9 +38,11 @@ public:
     DEFINE_SETTER(int, _HP, setHP);
     const std::string& getDisplayName(){return _displayName;}
     DEFINE_SETTER_CONST_REF(std::string, _displayName, setDisplayName);
+    Node* getNode(){return _node;}
+    DEFINE_SETTER_RETAIN(Node*, _node, setNode);
     
-    RRGLevelObject():_tileCoord(cocos2d::Vec2::ZERO),_HP(0),_displayName(""){}
-    ~RRGLevelObject(){}
+    RRGLevelObject():_tileCoord(cocos2d::Vec2::ZERO),_HP(0),_displayName(""),_node(nullptr){}
+    ~RRGLevelObject(){CC_SAFE_RELEASE_NULL(_node);}
     
     CREATE_FUNC(RRGLevelObject);
 };

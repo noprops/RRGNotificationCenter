@@ -44,7 +44,7 @@ inline void RRGNotification::addValue(cocos2d::Ref* value, const std::string& ke
 template <typename T>
 inline T RRGNotification::getValue(const std::string& key)
 {
-    return _objectMap.at(key);
+    return dynamic_cast<T>(_objectMap.at(key));
 }
 template <>
 inline int RRGNotification::getValue(const std::string& key)

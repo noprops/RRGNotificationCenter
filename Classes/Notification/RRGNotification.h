@@ -16,19 +16,39 @@
 #define DEFINE_SETTER(varType, pvarName, setterName)\
 public: virtual void setterName(varType var)\
 {\
-varType oldVal = pvarName;\
-pvarName = var;\
-varType newVal = pvarName;\
-sharedNotificationCenter->postDidChangeValueNotification(#pvarName,this,oldVal,newVal);\
+    varType oldVal = pvarName;\
+    pvarName = var;\
+    varType newVal = pvarName;\
+    sharedNotificationCenter->postDidChangeValueNotification(#pvarName,this,oldVal,newVal);\
 }
 
 #define DEFINE_SETTER_CONST_REF(varType, pvarName, setterName)\
 public: virtual void setterName(const varType& var)\
 {\
-varType oldVal = pvarName;\
-pvarName = var;\
-varType newVal = pvarName;\
-sharedNotificationCenter->postDidChangeValueNotification(#pvarName,this,oldVal,newVal);\
+    varType oldVal = pvarName;\
+    pvarName = var;\
+    varType newVal = pvarName;\
+    sharedNotificationCenter->postDidChangeValueNotification(#pvarName,this,oldVal,newVal);\
+}
+
+#define DEFINE_SETTER_RETAIN(varType, pvarName, setterName)\
+public: virtual void setterName(varType var)\
+{ \
+    if (pvarName != var) \
+    { \
+        varType oldVal = pvarName;\
+        CC_SAFE_RETAIN(oldVal);\
+        varType newVal = var;\
+        CC_SAFE_RETAIN(newVal);\
+        \
+        CC_SAFE_RETAIN(var); \
+        CC_SAFE_RELEASE(pvarName); \
+        pvarName = var;\
+        sharedNotificationCenter->postDidChangeValueNotification(#pvarName,this,oldVal,newVal);\
+        \
+        CC_SAFE_RELEASE(oldVal);\
+        CC_SAFE_RELEASE(newVal);\
+    } \
 }
 
 extern const char* kNotificationOldKey;

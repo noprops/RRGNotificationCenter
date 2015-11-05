@@ -5,6 +5,7 @@ namespace {
     const char* kTileCoord = "_tileCoord";
     const char* kHP = "_HP";
     const char* kDisplayName = "_displayName";
+    const char* kNode = "_node";
 }
 
 using namespace std;
@@ -128,7 +129,17 @@ bool HelloWorld::init()
      [](Ref* sender, const std::string& oldVal, const std::string& newVal){
          CCLOG("old = %s new = %s",oldVal.c_str(),newVal.c_str());
      });
-     
+    
+    sharedNotificationCenter->addKeyValueObserver<Node*>
+    (this,
+     kNode,
+     _levelObject,
+     [](Ref* sender, Node* oldVal, Node* newVal){
+         string oldStr = (oldVal)?oldVal->getDescription():"null";
+         string newStr = (newVal)?newVal->getDescription():"null";
+         CCLOG("old = %s new = %s",oldStr.c_str(),newStr.c_str());
+     });
+    
     return true;
 }
 
@@ -154,4 +165,5 @@ void HelloWorld::item2Callback(Ref* sender)
     _levelObject->setTileCoord(tileCoord);
     _levelObject->setHP(HP);
     _levelObject->setDisplayName(name);
+    _levelObject->setNode((_levelObject->getNode())?nullptr:Node::create());
 }
