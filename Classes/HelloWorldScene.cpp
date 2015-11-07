@@ -166,12 +166,7 @@ bool HelloWorld::init()
 void HelloWorld::item1Callback(Ref* sender)
 {
     CCLOG("post test notification");
-    RRGNotification* note = RRGNotification::create(kTestNotification, this);
-    note->addValue(Node::create(), "node");
-    note->addValue(this, "HelloWorld");
-    note->addValue(100, "int");
-    note->addValue("string", "string");
-    //sharedNotificationCenter->postNotification(kTestNotification, this);
+    sharedNotificationCenter->postNotification(kTestNotification, this);
 }
 
 void HelloWorld::item2Callback(Ref* sender)
