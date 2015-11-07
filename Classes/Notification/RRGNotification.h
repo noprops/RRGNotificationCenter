@@ -52,10 +52,6 @@ public: virtual void setterName(varType var)\
     } \
 }
 
-extern const char* kNotificationOldKey;
-extern const char* kNotificationNewKey;
-
-class RRGNotificationCenter;
 class RRGNotification : public cocos2d::Ref
 {
 protected:

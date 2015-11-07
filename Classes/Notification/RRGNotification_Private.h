@@ -112,6 +112,11 @@ inline cocos2d::Rect RRGNotification::getValue(const std::string& key)
 
 #pragma mark - notification center
 
+namespace {
+    const char* kNotificationOldKey = "__old__";
+    const char* kNotificationNewKey = "__new__";
+}
+
 template <typename T>
 inline void RRGNotificationCenter::addKeyValueObserver(Ref* observer,
                                                        const std::string& key,
