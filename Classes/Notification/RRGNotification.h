@@ -38,6 +38,7 @@ public: virtual void setterName(varType var)\
     { \
         varType oldVal = pvarName;\
         CC_SAFE_RETAIN(oldVal);\
+        \
         varType newVal = var;\
         CC_SAFE_RETAIN(newVal);\
         \
@@ -54,6 +55,7 @@ public: virtual void setterName(varType var)\
 extern const char* kNotificationOldKey;
 extern const char* kNotificationNewKey;
 
+class RRGNotificationCenter;
 class RRGNotification : public cocos2d::Ref
 {
 protected:
@@ -74,11 +76,39 @@ public:
     static RRGNotification* create(const std::string& name, Ref* sender);
     bool init(const std::string& name, Ref* sender);
     
-    template <typename T>
-    inline void addValue(T value, const std::string& key);
+    template <typename T,
+    typename std::enable_if<!std::is_convertible<T, cocos2d::Ref*>::value,
+    std::nullptr_t>::type = nullptr>
+    inline void addValue(T value, const std::string& key)
+    {
+        //CCLOG("%s", __PRETTY_FUNCTION__);
+        _valueMap[key] = value;
+    }
+
+    void addValue(cocos2d::Ref* value, const std::string& key)
+    {
+        //CCLOG("%s", __PRETTY_FUNCTION__);
+        if (value) {
+            _objectMap.insert(key, value);
+        }
+    }
     
-    template <typename T>
-    inline T getValue(const std::string& key);
+    template <typename T,
+    typename std::enable_if<!std::is_convertible<T, cocos2d::Ref*>::value,
+    std::nullptr_t>::type = nullptr>
+    inline T getValue(const std::string& key)
+    {
+        //CCLOG("%s", __PRETTY_FUNCTION__);
+        return 0;
+    }
+    template <typename T,
+    typename std::enable_if<std::is_convertible<T, cocos2d::Ref*>::value,
+    std::nullptr_t>::type = nullptr>
+    inline T getValue(const std::string& key)
+    {
+        //CCLOG("%s", __PRETTY_FUNCTION__);
+        return dynamic_cast<T>(_objectMap.at(key));
+    }
 };
 
 class RRGNotificationCenter : public cocos2d::Ref

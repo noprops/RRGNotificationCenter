@@ -28,16 +28,27 @@ class RRGLevelObject : public cocos2d::Node
 {
 private:
     cocos2d::Vec2 _tileCoord;
+    cocos2d::Size _size;
+    cocos2d::Rect _rect;
     int _HP;
     std::string _displayName;
     Node* _node;
 public:
     const cocos2d::Vec2& getTileCoord(){return _tileCoord;}
     DEFINE_SETTER_CONST_REF(cocos2d::Vec2, _tileCoord, setTileCoord);
+    
+    const cocos2d::Size& getSize(){return _size;}
+    DEFINE_SETTER_CONST_REF(cocos2d::Size, _size, setSize);
+    
+    const cocos2d::Rect& getRect(){return _rect;}
+    DEFINE_SETTER_CONST_REF(cocos2d::Rect, _rect, setRect);
+    
     int getHP(){return _HP;}
     DEFINE_SETTER(int, _HP, setHP);
+    
     const std::string& getDisplayName(){return _displayName;}
     DEFINE_SETTER_CONST_REF(std::string, _displayName, setDisplayName);
+    
     Node* getNode(){return _node;}
     DEFINE_SETTER_RETAIN(Node*, _node, setNode);
     

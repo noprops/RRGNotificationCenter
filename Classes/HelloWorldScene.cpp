@@ -3,6 +3,8 @@
 namespace {
     const char* kTestNotification = "test";
     const char* kTileCoord = "_tileCoord";
+    const char* kSize = "_size";
+    const char* kRect = "_rect";
     const char* kHP = "_HP";
     const char* kDisplayName = "_displayName";
     const char* kNode = "_node";
@@ -114,6 +116,23 @@ bool HelloWorld::init()
          CCLOG("old = {%.0f,%.0f} new = {%.0f,%.0f}",
                oldVal.x,oldVal.y,newVal.x,newVal.y);
      });
+    sharedNotificationCenter->addKeyValueObserver<Size>
+    (this,
+     kSize,
+     _levelObject,
+     [](Ref* sender, const Size& oldVal, const Size& newVal){
+         CCLOG("old = {%.0f,%.0f} new = {%.0f,%.0f}",
+               oldVal.width,oldVal.height,newVal.width,newVal.height);
+     });
+    sharedNotificationCenter->addKeyValueObserver<Rect>
+    (this,
+     kRect,
+     _levelObject,
+     [](Ref* sender, const Rect& oldVal, const Rect& newVal){
+         CCLOG("old = {{%.0f,%.0f}{%.0f,%.0f}} new = {{%.0f,%.0f}{%.0f,%.0f}}",
+               oldVal.origin.x,oldVal.origin.y,oldVal.size.width,oldVal.size.height,
+               newVal.origin.x,newVal.origin.y,newVal.size.width,newVal.size.height);
+     });
     sharedNotificationCenter->addKeyValueObserver<int>
     (this,
      kHP,
@@ -147,22 +166,33 @@ bool HelloWorld::init()
 void HelloWorld::item1Callback(Ref* sender)
 {
     CCLOG("post test notification");
-    sharedNotificationCenter->postNotification(kTestNotification, this);
+    RRGNotification* note = RRGNotification::create(kTestNotification, this);
+    note->addValue(Node::create(), "node");
+    note->addValue(this, "HelloWorld");
+    note->addValue(100, "int");
+    note->addValue("string", "string");
+    //sharedNotificationCenter->postNotification(kTestNotification, this);
 }
 
 void HelloWorld::item2Callback(Ref* sender)
 {
-    CCLOG("change variables of levelobject");
+    CCLOG("********************************\nchange variables of levelobject\n********************************");
     
     static Vec2 tileCoord = Vec2::ZERO;
+    static Size size = Size::ZERO;
+    static Rect rect = Rect::ZERO;
     static int HP = 0;
     static std::string name = "";
     
     tileCoord += Vec2(1,1);
+    size = Size(size.width + 1, size.height + 1);
+    rect = Rect(rect.origin.x + 1, rect.origin.y + 1, rect.size.width + 1, rect.size.height + 1);
     HP += 1;
     name += "a";
     
     _levelObject->setTileCoord(tileCoord);
+    _levelObject->setSize(size);
+    _levelObject->setRect(rect);
     _levelObject->setHP(HP);
     _levelObject->setDisplayName(name);
     _levelObject->setNode((_levelObject->getNode())?nullptr:Node::create());

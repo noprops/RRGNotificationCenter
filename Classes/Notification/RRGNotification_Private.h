@@ -13,43 +13,32 @@
 
 #pragma mark - notification
 
-template <typename T>
-inline void RRGNotification::addValue(T value, const std::string& key)
-{
-    _valueMap[key] = value;
-}
 template <>
-inline void RRGNotification::addValue(cocos2d::Vec2 value, const std::string& key)
+inline void RRGNotification::addValue<cocos2d::Vec2,nullptr>
+(cocos2d::Vec2 value, const std::string& key)
 {
+    //CCLOG("%s", __PRETTY_FUNCTION__);
     _vec2Map[key] = value;
 }
 template <>
-inline void RRGNotification::addValue(cocos2d::Size value, const std::string& key)
+inline void RRGNotification::addValue<cocos2d::Size,nullptr>
+(cocos2d::Size value, const std::string& key)
 {
+    //CCLOG("%s", __PRETTY_FUNCTION__);
     _sizeMap[key] = value;
 }
 template <>
-inline void RRGNotification::addValue(cocos2d::Rect value, const std::string& key)
+inline void RRGNotification::addValue<cocos2d::Rect,nullptr>
+(cocos2d::Rect value, const std::string& key)
 {
+    //CCLOG("%s", __PRETTY_FUNCTION__);
     _rectMap[key] = value;
-}
-template <>
-inline void RRGNotification::addValue(cocos2d::Ref* value, const std::string& key)
-{
-    if (value) {
-        _objectMap.insert(key, value);
-    }
 }
 
 #pragma mark - get value
 
-template <typename T>
-inline T RRGNotification::getValue(const std::string& key)
-{
-    return dynamic_cast<T>(_objectMap.at(key));
-}
 template <>
-inline int RRGNotification::getValue(const std::string& key)
+inline int RRGNotification::getValue<int,nullptr>(const std::string& key)
 {
     if (_valueMap.find(key) == _valueMap.end()) {
         return 0;
@@ -139,7 +128,8 @@ inline void RRGNotificationCenter::addKeyValueObserver(Ref* observer,
         nameKeyMap.insert(std::make_pair(key, observerToCallbackMap));
     }
     ObserverToCallbackMap& observerToCallbackMap = nameKeyMap.at(key);
-    auto callback2 = [callback](RRGNotification* note){
+    auto callback2 = 
+    [callback](RRGNotification* note){
         T oldVal = note->getValue<T>(kNotificationOldKey);
         T newVal = note->getValue<T>(kNotificationNewKey);
         callback(note->getSender(), oldVal, newVal);
